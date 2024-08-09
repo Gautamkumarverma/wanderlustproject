@@ -1,0 +1,78 @@
+ <% layout("/layouts/boilerplate") %>
+
+    <!-- <body>
+          <div class="row mt-3">
+               <div class="col-8 offset-2">
+                    
+                    <h2>Add New Listing</h2>
+                    <form method="POST" action="/listings">
+                         <div class="mb-3">
+                              <label for="title" class="form-table">Title</label>
+                              <input type="text" name="title" placeholder="Add a catchy  title"
+                                   class="form-control">
+                         </div>
+
+                         <div class="mb-3">
+                              <label for="description" class="form-table">Description</label>
+                              <textarea rows="5" cols="20" name="description" class="form-control"></textarea>
+                         </div>
+
+                         <div class="mb-3">
+                              <label for="image" class="form-table">Image URL/LINK</label>
+                              <input type="text" name="image" placeholder="enter image URL/LINK"
+                                   class="form-control">
+                         </div>
+                         <div class="row">
+                              <div class="mb-3 col-md-4">
+                                   <label for="price" class="form-table">Price</label>
+                                   <input type="number" name="price" placeholder="1200" class="form-control">
+                              </div>
+
+                              <div class="mb-3 col-md-8">
+                                   <label for="country" class="form-table">Country</label>
+                                   <input type="text" name="country" placeholder="India" class="form-control">
+                              </div>
+                         </div>
+
+                         <div class="mb-3">
+                              <label for="location" class="form-table">Location</label>
+                              <input type="text" name="location" placeholder="Giridih ,Jharkhand"
+                                   class="form-control">
+                         </div>
+
+                         <button class="btn btn-dark add-btn mt-3">Add</button>
+                     <br><br>
+                    </form>
+               </div>
+          </div>
+
+     </body> -->
+
+     <form method="POST" action="/listings">
+          <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input type="text" name="listing[title]" class="form-control" required>
+          </div>
+          <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea name="listing[description]" class="form-control"></textarea>
+          </div>
+          <div class="mb-3">
+              <label for="image" class="form-label">Image URL</label>
+              <input type="text" name="listing[image]" class="form-control">
+          </div>
+          <div class="mb-3">
+              <label for="price" class="form-label">Price</label>
+              <input type="number" name="listing[price]" class="form-control">
+          </div>
+          <div class="mb-3">
+              <label for="location" class="form-label">Location</label>
+              <input type="text" name="listing[location]" class="form-control">
+          </div>
+          <div class="mb-3">
+              <label for="country" class="form-label">Country</label>
+              <input type="text" name="listing[country]" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">Add Listing</button>
+      </form>
+      
