@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const app = express();
 const Listing = require("./models/listing.js");
 const path = require("path");
+const wrapAsync = require("./utils/wrapAsync.js");
+const ExpressError = require("./utils/ExpressError.js");
+
+
 
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
@@ -25,6 +29,76 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 
+// Listing All post
+app.get("/listings", wrapAsync ( async (req, res) => {
+    let allListing = await Listing.find({});
+    res.render("listings/index.ejs", { allListing });
+}));
+// <------------------------------>
+
+// New route
+app.get("/listings/new", (req, res) => {
+    res.render("listings/new.ejs");
+});
+
+// Create route
+app.post("/listings", wrapAsync (async (req, res,next) => {
+    if (!req.body.listing) {
+       throw new ExpressError(400, "send valid for listing !");
+    }
+        const newListing = new Listing(req.body.listing);
+        await newListing.save();
+        res.redirect("/listings");
+ 
+}));
+// <--------------------------------->
+//show route
+app.get("/listings/:id", wrapAsync ( async (req, res) => {
+    let { id } = req.params;
+    console.log(id);
+    const listing = await Listing.findById(id);
+    res.render("listings/show.ejs", { listing });
+
+}));
+
+
+// Edit route
+app.get("/listings/:id/edit", wrapAsync ( async (req, res) => {
+    console.log("Greate");
+    let { id } = req.params;
+    let listing = await Listing.findById(id);
+    console.log(listing);
+    res.render("listings/edit.ejs", { listing });
+}));
+
+// Update route
+app.put("/listings/:id", wrapAsync ( async (req, res) => {
+  
+    if (!req.body.listing) {
+        throw new ExpressError(400, "send valid for listing !");
+    }
+    let { id } = req.params;
+    let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    console.log(listing);
+    res.redirect(`/listings/${id}`);
+}));
+// delete route
+app.delete("/listings/:id", wrapAsync ( async (req, res) => {
+    let { id } = req.params;
+    let deletedList = await Listing.findByIdAndDelete(id);
+    console.log("pppppppppppppp", deletedList);
+    res.redirect("/listings");
+}));
+
+
+// <======== from here========================>
+
+
+app.get("/", (req, res) => {
+    res.send("working  fine");
+});
+
+
 // app.get("/testListing", async (req, res) => {
 //     let sampleListing = new Listing({
 //         title: "My new villa",
@@ -35,97 +109,23 @@ app.engine("ejs", ejsMate);
 //     });
 //     // Listing.clear();
 //     await sampleListing.save();
-//     console.log("sample was saved");
+//     console.log("sample bwas saved");
 //     res.send("successful testing");
 
 
 // });
-
-// delete route
-app.delete("/listings/:id", async (req, res) => {
-    let { id } = req.params;
-    let deletedList = await Listing.findByIdAndDelete(id);
-    console.log("pppppppppppppp", deletedList);
-    res.redirect("/listings");
+// If no any route match with the incoming requext
+app.all("*", (req, res, next) => {
+    next(new ExpressError(404, "Page not found !"));
 });
-
-// Edit route
-app.get("/listings/:id/edit", async (req, res) => {
-    console.log("Greate");
-    let { id } = req.params;
-    let listing = await Listing.findById(id);
-    console.log(listing);
-    res.render("listings/edit.ejs", { listing });
+// error handling middleware
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;  // Default to 500 if no statusCode is provided
+    const message = err.message || "Internal Server Error";
+   
+    res.render("error.ejs",{message});
+    // res.status(statusCode).send(message);
 });
-// Update route
-app.put("/listings/:id", async (req, res) => {
-    let { id } = req.params;
-    let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-    console.log(listing);
-    res.redirect(`/listings/${id}`);
-});
-
-//NEW ROUTE
-app.get("/listings/new", (req, res) => {
-    res.render("listings/new.ejs");
-});
-// create route
-// app.post("/listings", async (req, res) => {
-//     const newListing = new Listing(req.body.listing);
-//     console.log(newListing);
-//     await newListing.save();
-  
-//     res.redirect("/listings");
-// });
-// change your create route with this code  --> TA
-// is it clear now it is showing w
-// because in image path i  type random value
-
-app.post("/listings", async (req, res) => {
-    try {
-        let { id } = req.params;
-        console.log(id);
-    const newListing = new Listing(req.body.listing);
-    console.log(newListing);
-    let result=await newListing.save();
-    console.log(result);
-    res.redirect("/listings");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error saving listing");
-  }
-});
-
-
-
-// //This is for checking purpose -> the issue that i am facing
-// app.get("/findre", async (req, res) => {
-//     let f = await Listing.findById("66af5bceb1e0043e5152721d");
-
-//     console.log(f);
-//     res.send("Got result");
-// });
-
-// //Index route
-
-app.get("/listings", async (req, res) => {
-    let allListing = await Listing.find({});
-    res.render("listings/index.ejs", { allListing });
-});
-//
-//show route
-app.get("/listings/:id", async (req, res) => {
-    let { id } = req.params;
-    console.log(id);
-    const listing = await Listing.findById(id);
-    res.render("listings/show.ejs", { listing });
-
-});
-
-
-app.get("/", (req, res) => {
-    res.send("working  fine");
-})
-app.listen(8080, () => {
+app.listen(5000, () => {
     console.log("listening to port 8080");
 });

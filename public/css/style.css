@@ -6,6 +6,8 @@ body{
 }
 .continer{
    flex: 1;
+
+
 }
 .navbar{
     height: 5rem;
