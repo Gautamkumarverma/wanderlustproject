@@ -1,0 +1,8 @@
+
+/* The .wrapper element will always cover at least the entire height of the viewport. */
+.wrapper {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
