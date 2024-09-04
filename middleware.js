@@ -29,13 +29,27 @@ module.exports.isOwner = async (req, res, next) => {
   }
   next();
 };
+// <-----------------Ths is listing validation middleware--------->
+// module.exports.validateListing = (req, res, next) => {
+//   console.log("here", req.body);
+//   let { error } = listingSchema.validate(req.body);
 
+//   if (error) {
+//     console.log("gautam kumar Error");
+//     let errMsg = error.details.map((el) => el.message).join(",");
+//     throw new ExpressError(400, errMsg);
+//   } else {
+//     next();
+//   }
+// };
+// new
 module.exports.validateListing = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body);
+  console.log("here", req.body);
 
+  let { error } = listingSchema.validate(req.body);
   if (error) {
     let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
+    throw new ExpressError(400, error);
   } else {
     next();
   }

@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -14,8 +18,10 @@ const User = require("./models/user.js");
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/reviews.js");
 const userRouter = require("./routes/user.js");
+const Listing = require("./models/listing.js");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const dburl = process.env.ATLASDB_URL;
 main()
   .then(() => {
     console.log("connected to DB");
@@ -45,11 +51,6 @@ const sessionOptions = {
     httpOnly: true,
   },
 };
-
-app.get("/", (req, res) => {
-  res.send("working  fine");
-});
-
 app.use(session(sessionOptions));
 app.use(flash());
 app.use(passport.initialize());
@@ -76,6 +77,8 @@ app.use((req, res, next) => {
 //   res.send(registeredUser);
 // });
 
+
+
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
@@ -92,6 +95,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error.ejs", { message });
   // res.status(statusCode).send(message);
 });
-app.listen(5000, () => {
+app.listen(3000, () => {
   console.log("listening to port 5000");
 });

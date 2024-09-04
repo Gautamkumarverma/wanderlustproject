@@ -6,45 +6,48 @@ const { isLoggedIn, isOwner } = require("../middleware.js");
 const { validateListing } = require("../middleware.js");
 
 const listingController = require("../controllers/listings.js");
-// Listing All post || index route
-router.get("/", wrapAsync(listingController.index));
+const multer = require("multer");
 
+const { cloudinay, storage } = require("../cloudConfing.js");
+const upload = multer({ storage });
+
+router.post("/search/desti", listingController.searchListing);
+// Listing All post || index route
+// Create route
+router
+  .route("/")
+  .get(wrapAsync(listingController.index))
+  .post(
+    isLoggedIn,
+    upload.single("listing[image]"),
+    validateListing,
+    wrapAsync(listingController.createListing)
+  );
 // New route
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
 //show route
-router.get("/:id", wrapAsync(listingController.showListing));
+//Delete route
+//update  route
+router
+  .route("/:id")
+  .get(wrapAsync(listingController.showListing))
+  .put(
+    isLoggedIn,
+    isOwner,
 
-// Create route
-router.post(
-  "/",
-  validateListing,
-  isLoggedIn,
-  wrapAsync(listingController.createListing)
-);
+    upload.single("listing[image]"),
+    validateListing,
+    wrapAsync(listingController.updateListing)
+  )
+  .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
+
 // Edit route
 router.get(
   "/:id/edit",
   isLoggedIn,
   isOwner,
   wrapAsync(listingController.renderEditForm)
-);
-
-// Update route
-router.put(
-  "/:id",
-  validateListing,
-  isLoggedIn,
-  isOwner,
-  wrapAsync(listingController.updateListing)
-);
-
-// delete route
-router.delete(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  wrapAsync(listingController.destroyListing)
 );
 
 module.exports = router;

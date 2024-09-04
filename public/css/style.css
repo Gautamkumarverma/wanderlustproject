@@ -104,3 +104,9 @@ body{
     background-color: #e10d65 !important;
     border: none !important;
  }
+
+ /* map */
+ #map { 
+    height: 400px; 
+    width: 100vh; 
+}

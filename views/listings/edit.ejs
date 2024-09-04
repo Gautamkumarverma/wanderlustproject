@@ -3,7 +3,7 @@
                      <div class="col-8 offset-2">
                             
                             <h3>Edit your listing</h3>
-                            <form method="post" action="/listings/<%= listing.id %>?_method=PUT"  class="needs-validation" novalidate>
+                            <form method="post" action="/listings/<%= listing.id %>?_method=PUT"  class="needs-validation" novalidate enctype="multipart/form-data">
                                    <div class="mb-3">
                                           <label for="title" class="form-table">Title</label>
                                           <input type="text" name="listing[title]" value="<%= listing.title %>"
@@ -21,14 +21,16 @@
                                                         Please enter atleast short Description !.
                                                       </div>
                                    </div>
-
+                            <div class="mb-3">
+                                   <p>Original image</p>
+                                   <img   height="100px" width="200px" src="<%= originalImageUrl %> " />
+                            </div>
                                    <div class="mb-3">
-                                          <label for="image" class="form-table">Image</label>
-                                          <input type="text" name="listing[image]" value="<%= listing.image %>"
-                                                 class="form-control" required>
-                                                 <div class="invalid-feedback">
-                                                        Please enter Image Link/URL !.
-                                                      </div>
+                                          <label for="image" class="form-table"Upload new Image</label>
+                                          <input type="file"
+                                           name="listing[image]"
+                                          class="form-control" 
+                                          />
                                    </div>
                                    <div class="row">
                                           <div class="mb-3 col-md-4">
