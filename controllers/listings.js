@@ -31,7 +31,6 @@ module.exports.showListing = async (req, res) => {
 };
 
 module.exports.createListing = async (req, res, next) => {
-
   let response = await geocodingClient
     .forwardGeocode({
       query: req.body.listing.location,
@@ -99,5 +98,19 @@ module.exports.searchListing = async (req, res) => {
   const splitArray = destination.split(/[\s,]+/);
   console.log(splitArray);
   const allListing = await Listing.find({ location: splitArray });
+  res.render("listings/index.ejs", { allListing });
+};
+
+module.exports.catagory = async (req, res) => {
+  let cat = req.params;
+  console.log(cat);
+
+  let allListing = await Listing.find(cat);
+  allListing.forEach((category) => {
+    category.formattedPrice = category.price.toLocaleString("en-IN", {
+      style: "currency",
+      currency: "INR",
+    });
+  });
   res.render("listings/index.ejs", { allListing });
 };

@@ -78,7 +78,6 @@ app.use((req, res, next) => {
 // });
 
 
-
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
@@ -96,5 +95,5 @@ app.use((err, req, res, next) => {
   // res.status(statusCode).send(message);
 });
 app.listen(3000, () => {
-  console.log("listening to port 5000");
+  console.log("listening to port 3000");
 });

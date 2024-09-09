@@ -1,0 +1,26 @@
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.heart-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-image: url('heart-empty-icon.png'); /* Path to your empty heart icon */
+    background-size: cover;
+    cursor: pointer;
+    transition: background-image 0.3s;
+}
+
+.heart-icon.liked {
+    background-image: url('heart-filled-icon.png'); /* Path to your filled heart icon */
+}

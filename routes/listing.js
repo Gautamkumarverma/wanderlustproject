@@ -11,6 +11,12 @@ const multer = require("multer");
 const { cloudinay, storage } = require("../cloudConfing.js");
 const upload = multer({ storage });
 
+// router.get("/category", (req, res) => {
+//   console.log(req.body);
+//   console.log("Grate Gautam kumar");
+//   res.send("Ram");
+// });
+router.get("/category/:category", listingController.catagory);
 router.post("/search/desti", listingController.searchListing);
 // Listing All post || index route
 // Create route
